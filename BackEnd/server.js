@@ -32,6 +32,21 @@ app.get('/api/movies', async (req, res) => {
     res.status(200).json({movies})
 });
 
+app.get('/api/movie/:id', async (req ,res)=>{
+  const movie = await movieModel.findById(req.params.id);
+  res.json(movie);
+})
+
+app.post('/api/movies',async (req, res)=>{
+  console.log(req.body.title);
+  const {title, year, poster} = req.body;
+
+  const newMovie = new movieModel({title, year, poster});
+  await newMovie.save();
+
+  res.status(201).json({"message":"Movie Added!",Movie:newMovie});
+})
+
 //fetches a specific movie by its ID
 app.get('/api/movie/:id', async (req, res) => {
   let movie = await movieModel.findById({ _id: req.params.id });
@@ -43,17 +58,6 @@ app.put('/api/movie/:id', async (req, res) => {
   let movie = await movieModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
   res.send(movie);
 });
-
-
-app.post('/api/movies',async (req, res)=>{
-    console.log(req.body.title);
-    const {title, year, poster} = req.body;
-
-    const newMovie = new movieModel({title, year, poster});
-    await newMovie.save();
-
-    res.status(201).json({"message":"Movie Added!",Movie:newMovie});
-})
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
