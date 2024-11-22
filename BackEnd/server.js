@@ -32,10 +32,18 @@ app.get('/api/movies', async (req, res) => {
     res.status(200).json({movies})
 });
 
-app.get('/api/movie/:id', async (req ,res)=>{
-  const movie = await movieModel.findById(req.params.id);
-  res.json(movie);
-})
+//fetches a specific movie by its ID
+app.get('/api/movie/:id', async (req, res) => {
+  let movie = await movieModel.findById({ _id: req.params.id });
+  res.send(movie);
+});
+
+//updates a specific movie’s information
+app.put('/api/movie/:id', async (req, res) => {
+  let movie = await movieModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+  res.send(movie);
+});
+
 
 app.post('/api/movies',async (req, res)=>{
     console.log(req.body.title);
