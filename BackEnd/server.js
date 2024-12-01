@@ -1,10 +1,23 @@
+/**
+ * seperate server to hold movie data and be accessed by application 
+ */
+
+//declare attributes
 const express = require('express');
 const app = express();
 const port = 4000;
-
+/*
+    CORS (Cross-Origin Resource Sharing) 
+        is a security feature built into browsers that restricts 
+        web pages from making requests to a different domain or port 
+        than the one that served the web page.
+*/
 const cors = require('cors');
 app.use(cors());
 
+/*  This middleware setup allows app to make API requests 
+    to the backend (Express) without encountering CORS-related issues.
+*/
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -12,13 +25,25 @@ app.use(function(req, res, next) {
   next();
 });
 
+/*
+    body-parsing middleware
+    responsible for parsing the incoming request bodies in a middleware before handling it
+*/
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+/*
+    Mongoose provides a schema-based solution for modeling application data.
+    Connecting to mongodb cluster for db
+*/
 const mongoose = require('mongoose');
 mongoose.connect('mongodb+srv://admin:admin@martinscluster.w5rtkz0.mongodb.net/DB14');
 
+/*
+    Mongoose uses data models as a blueprint for defining the structure of data within a MongoDB collection
+    Models are created from schemas
+*/
 const movieSchema = new mongoose.Schema({
   title:String,
   year:String,
@@ -27,6 +52,9 @@ const movieSchema = new mongoose.Schema({
 
 const movieModel = new mongoose.model('myMovies',movieSchema);
 
+/*
+    Using express.js to get data
+*/
 app.get('/api/movies', async (req, res) => {
     const movies = await movieModel.find({});
     res.status(200).json({movies})
