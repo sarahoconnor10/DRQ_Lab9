@@ -65,6 +65,9 @@ app.get('/api/movie/:id', async (req ,res)=>{
   res.json(movie);
 })
 
+/*
+    Using express.js to handle delete requests
+*/
 app.delete('/api/movie/:id', async (req, res) => {
   const movie = await movieModel.findByIdAndDelete(req.params.id);
   res.send(movie);
