@@ -8,7 +8,7 @@ const Read = () => {
 
   useEffect(() => {
     
-    axios.get('http://localhost:4000/api/movies')
+    axios.get('http://localhost:4000/api/movies') //asynchronously requests data from server
       .then((response) => {
         console.log(response.data);
         setMovies(response.data.movies);
