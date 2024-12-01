@@ -6,19 +6,19 @@ import axios from "axios";
 
 const MovieItem = (props) => {
   useEffect(() => {
-   // console.log("Movie Item:", props.mymovie);
+    // console.log("Movie Item:", props.mymovie);
   }, [props.mymovie]); // Only run this effect when the mymovie prop changes
- 
   const handleDelete = (e) => {
     e.preventDefault();
     axios.delete('http://localhost:4000/api/movie/' + props.mymovie._id)
       .then(() => {
-        props.Reload(); // Refresh the movie list after deletion
+        // props.Reload(); // Refresh the movie list after deletion
       })
       .catch((error) => {
         console.error("Error deleting movie:", error);
-      });}
-      
+      });
+  }
+
   return (
     <div>
       <Card>
@@ -28,9 +28,9 @@ const MovieItem = (props) => {
             <img src={props.mymovie.poster} alt={props.mymovie.title} />
             <footer>{props.mymovie.year}</footer>
           </blockquote>
-          <Button variant="danger" onClick={handleDelete}>Delete</Button>
         </Card.Body>
         <Link to={"/edit/" + props.mymovie._id} className="btn btn-primary">Edit</Link>
+        <Button variant="danger" onClick={handleDelete}>Delete</Button>
       </Card>
     </div>
   );
